@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:provider_listview/service/tasklist.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/task.dart';
@@ -82,12 +83,12 @@ class DatabaseService {
     return List.generate(maps.length, (index) => Task.fromMap(maps[index]));
   }
 
-  // Future<Breed> breed(int id) async {
-  //   final db = await _databaseService.database;
-  //   final List<Map<String, dynamic>> maps =
-  //       await db.query('breeds', where: 'id = ?', whereArgs: [id]);
-  //   return Breed.fromMap(maps[0]);
-  // }
+  Future<Task> taskById(Task task) async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('task', where: 'name = ?', whereArgs: [task.name]);
+    return Task.fromMap(maps[0]);
+  }
 
   // Future<List<Dog>> dogs() async {
   //   final db = await _databaseService.database;
@@ -96,20 +97,20 @@ class DatabaseService {
   // }
 
   // // A method that updates a breed data from the breeds table.
-  // Future<void> updateBreed(Breed breed) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseService.database;
+  Future<void> updateTask(Task task, String name) async {
+    // Get a reference to the database.
+    final db = await _databaseService.database;
 
-  //   // Update the given breed
-  //   await db.update(
-  //     'breeds',
-  //     breed.toMap(),
-  //     // Ensure that the Breed has a matching id.
-  //     where: 'id = ?',
-  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
-  //     whereArgs: [breed.id],
-  //   );
-  // }
+    // Update the given breed
+    await db.update(
+      'task',
+      task.toMap(),
+      // Ensure that the Breed has a matching id.
+      where: 'name = ?',
+      // Pass the Breed's id as a whereArg to prevent SQL injection.
+      whereArgs: [name],
+    );
+  }
 
   // Future<void> updateDog(Dog dog) async {
   //   final db = await _databaseService.database;
@@ -117,19 +118,19 @@ class DatabaseService {
   // }
 
   // // A method that deletes a breed data from the breeds table.
-  // Future<void> deleteBreed(int id) async {
-  //   // Get a reference to the database.
-  //   final db = await _databaseService.database;
+  Future<void> deleteTask(String name) async {
+    // Get a reference to the database.
+    final db = await _databaseService.database;
 
-  //   // Remove the Breed from the database.
-  //   await db.delete(
-  //     'breeds',
-  //     // Use a `where` clause to delete a specific breed.
-  //     where: 'id = ?',
-  //     // Pass the Breed's id as a whereArg to prevent SQL injection.
-  //     whereArgs: [id],
-  //   );
-  // }
+    // Remove the Breed from the database.
+    await db.delete(
+      'task',
+      // Use a `where` clause to delete a specific breed.
+      where: 'name = ?',
+      // Pass the Breed's id as a whereArg to prevent SQL injection.
+      whereArgs: [name],
+    );
+  }
 
   // Future<void> deleteDog(int id) async {
   //   final db = await _databaseService.database;
